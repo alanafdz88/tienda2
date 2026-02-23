@@ -33,6 +33,20 @@ public void addViewControllers(ViewControllerRegistry registry) {
     registry.addViewController("/registro/nuevo").setViewName("/registro/nuevo");
 }
 
+
+ @Bean
+    public org.springframework.web.servlet.LocaleResolver localeResolver() {
+        var slr = new SessionLocaleResolver();
+        slr.setDefaultLocale(Locale.getDefault());
+        slr.setLocaleAttributeName("session.current.locale");
+        slr.setTimeZoneAttributeName("session.current.timezone");
+        return slr;
+    }
+
+
+
+
+
 /* El siguiente método se utilizar para publicar en la nube, independientemente */
 @Bean
 public SpringResourceTemplateResolver templateResolver_0() {
@@ -47,15 +61,6 @@ public SpringResourceTemplateResolver templateResolver_0() {
     
 }
 
-
-@Bean
-public SessionLocaleResolver localeResolver() {
-    var slr = new SessionLocaleResolver();
-    slr.setDefaultLocale(Locale.getDefault());
-    slr.setLocaleAttributeName("session.current.locale");
-    slr.setTimeZoneAttributeName("session.current.timezone");
-    return slr;
-}
 @Bean
 public LocaleChangeInterceptor localeChangeInterceptor() {
     var lci = new LocaleChangeInterceptor();
