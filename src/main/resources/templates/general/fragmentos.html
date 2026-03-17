@@ -82,7 +82,7 @@
 
                         <!-- este es un metodo negativo, si no está autenticado, le muestra la etiqueta del login, trae un navbar del css --> 
                         <ul class="navbar-nav" sec:authorize="!isAuthenticated()">
-                            <li class="nav-item">
+                            <li class="nav-item my-auto">
                                 <a class="nav-link" th:href="@{/login}">
                                     <i class="fas fa-sign-in-alt"></i>
                                     <span class="ms-1">Login</span>
@@ -94,7 +94,9 @@
                         <!-- este es un metodo positivo, si si está autenticado, le muestra el nombre de la persona, trae un navbar del css --> 
                         <ul class="navbar-nav" sec:authorize="isAuthenticated()">
                             <li class="nav-item my-auto">
-                                <a class="nav-link" th:href="@{/login}">
+                                <a class="nav-link">
+                                    <img th:src="@{${session.imagenUsuario}}"
+                                         alt="your image" height="40" class="round-circle"/>
                                     <i class="fas fa-sign-in-alt"></i>
                                     <span sec:authetication="name" class="ms-1"></span>
                                 </a>
