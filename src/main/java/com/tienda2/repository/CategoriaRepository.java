@@ -12,4 +12,9 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Integer> {
     
     // Método para obtener todas las categorías activas
     public List<Categoria> findByActivoTrue();
+    
+    
+    public List<Categoria> findByActivoFalse();
+
+    
 }

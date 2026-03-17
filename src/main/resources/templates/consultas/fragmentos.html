@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+   <head th:fragment="head">
+        <meta charset="UTF-8"/>
+        <title>TechShop</title>
+        <link rel="icon" type="image/png" sizes="16x16" href="/fav/favicon-16x16.png"/>
+        <link rel="icon" type="image/png" sizes="32x32" href="/fav/favicon-32x32.png"/>
+        <link rel="icon" type="image/png" sizes="96x96" href="/fav/favicon-96x96.png"/>
+        <link rel="icon" type="image/png" sizes="256x256" href="/fav/favicon-256x256.png"/>
+
+        <link th:href="@{/webjars/font-awesome/6.5.1/css/all.css}" rel="stylesheet"/>
+        <link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet"/>
+
+        <script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+        <script th:src="@{/js/rutinas.js}"></script>
+        <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+        <script th:src="@{/webjars/bootstrap/5.3.2/js/bootstrap.bundle.min.js}"></script>
+    </head>
+    <body>
+        <!-- fragmento 1 para tabs de categorías -->
+        <section th:fragment="tabs" class="py-3 mb-4">
+            <div class="d-flex justify-content-center px-5"> 
+                <ul class="nav nav-underline">
+                    <li class="nav-item">
+                        <a th:href="@{/}"                            
+                           class="nav-link" 
+                           aria-current="page">
+                            [[#{consultas.todas}]]
+                        </a>
+                    </li>
+                    <li th:each="c : ${categorias}" class="nav-item">
+                        <a th:href="@{/consultas/{id}(id=${c.idCategoria})}"                           
+                           class="nav-link">
+                            [[${c.descripcion}]]
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- fragmento 2 para el listado de tarjetas de productos -->
+        <section th:fragment="tarjetas" class="container py-4">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+                <div th:each="p : ${productos}" class="col">
+                    <div class="card h-100 shadow-sm">
+                        <div class="d-flex justify-content-center align-items-center bg-light p-3" style="height: 200px;">
+                            <img th:src="${p.rutaImagen}" class="img-fluid" 
+                                 th:alt="${p.descripcion}" 
+                                 style="max-height: 100%; object-fit: contain;"/>
+                        </div>
+                        <div class="card-header bg-white">
+                            <h5 class="card-title text-center text-truncate mb-0" th:text="${p.descripcion}">Título</h5>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <p class="card-text text-muted mb-auto text-truncate" th:text="${p.detalle}">Detalle</p>
+                        </div>
+                        <div class="card-footer bg-white d-flex justify-content-between align-items-center">
+                            <div class="fw-bold">
+                                <span class="text-success h5" th:text="${#numbers.formatCurrency(p.precio)}">$99.99</span>
+                                <span th:if="${p.existencias > 0}" class="badge text-bg-success ms-2" th:text="${p.existencias} + ' unidades'"></span>
+                                <span th:unless="${p.existencias > 0}" class="badge text-bg-danger ms-2">Agotado</span>
+                            </div>
+                            <form th:action="@{/carrito/agregar}" th:method="POST" class="d-inline">
+                                <input type="hidden" th:value="${p.idProducto}" name="idProducto"/>
+                                <button type="submit" 
+                                        class="btn btn-sm btn-primary" 
+                                        th:disabled="${p.existencias == 0}"
+                                        onclick="addCart(this.form)">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- fragmento 3 tu consulta derivada de categorías inactivas -->
+        <section th:fragment='consultas' class='row row-cols-1 p-2'>
+            <div class='card p-2'>
+                <div class="card-header text-center text-white bg-danger">
+                    <h5>Categorías Inactivas</h5>
+                </div>
+                <div class="card-body text-center">
+                    <p>Listado de categorías inactivas</p>
+                </div>
+                <div class="card-footer text-center">
+                    <a th:href="@{/consultas/inactivas}" class="btn btn-danger text-white">
+                        <i class='fa-solid fa-magnifying-glass'></i> Buscar
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </body>
+</html>
+
+<!-- fragmento 4 tabla de categorías inactivas -->
+<section th:fragment="tablaInactivas" class="container mt-4"
+         th:if="${categorias != null}">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Descripción</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="c : ${categorias}">
+                <td th:text="${c.idCategoria}"></td>
+                <td th:text="${c.descripcion}"></td>
+                <td>Inactiva</td>
+            </tr>
+        </tbody>
+    </table>
+</section>

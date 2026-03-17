@@ -25,4 +25,12 @@ public class CategoriaService {
         }
         return categoriaRepository.findAll();
     }
+    
+         
+@Transactional(readOnly = true)
+    public List<Categoria> consultaDerivada( ) {
+            return categoriaRepository.findByActivoFalse();
+    }
+    
+    
 }
