@@ -111,6 +111,16 @@
 
 
 
+ <!-- dependencias para lo de firebase-->
+
+<dependency>
+    <groupId>com.google.firebase</groupId>
+    <artifactId>firebase-admin</artifactId>
+    <version>9.5.0</version>
+    </dependency>
+
+
+
 
 
     </dependencies>
